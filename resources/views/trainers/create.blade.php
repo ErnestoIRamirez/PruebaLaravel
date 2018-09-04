@@ -4,7 +4,7 @@
 
 @section('content')
 
-    {!! Form::open(['route' => 'trainers.store', 'method' => 'POST', 'file' => true])!!}
+    {!! Form::open(['route' => 'trainers.store', 'method' => 'POST', 'files' => true])!!}
         <div class="form-group">
             {!! Form::label('name', 'Nombre')!!}
             {!! Form::text('name', null, ['class' => 'form-control']) !!}
@@ -16,6 +16,10 @@
         <div class="form-group">
             {!! Form::label('descripcion', 'Descripcion')!!}
             {!! Form::text('descripcion', null, ['class' => 'form-control']) !!}
+        </div>
+        <div class="form-group">
+            {!! Form::label('slug', 'Slug')!!}
+            {!! Form::text('slug', null, ['class' => 'form-control']) !!}
         </div>
 
         {!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
