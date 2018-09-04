@@ -4,6 +4,7 @@ namespace LaraDex\Http\Controllers;
 
 use Illuminate\Http\Request;
 use LaraDex\Trainer;
+use LaraDex\Http\Requests\StoreTrainerRequest;
 
 class TrainerController extends Controller
 {
@@ -35,23 +36,24 @@ class TrainerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTrainerRequest $request)
     {
         //dd($request);
+        $trainer = new Trainer();
         if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
             $name = time().$file->getClientOriginalName();
             $file->move(public_path().'/images/', $name);
             
         }
-        $trainer = new Trainer();
+        
         $trainer->name = $request->input('name');
         $trainer->descripcion = $request->input('descripcion');
         $trainer->avatar = $name;
         $trainer->slug = $request->input('slug');
         $trainer->save();
 
-        return 'Saved';
+        return redirect()->route('trainers.index')->with('status', 'Entrenador agregado correctamente');
     }
 
     /**
@@ -86,7 +88,7 @@ class TrainerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Trainer $trainer)
+    public function update(StoreTrainerRequest $request, Trainer $trainer)
     {
         $trainer->fill($request->except('avatar'));
         if ($request->hasFile('avatar')) {
@@ -97,7 +99,7 @@ class TrainerController extends Controller
         }
         $trainer->save();
 
-        return 'Update';
+        return redirect()->route('trainers.show', [$trainer])->with('status', 'Entrenador actualizado correctamente');
     }
 
     /**
@@ -106,8 +108,11 @@ class TrainerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Trainer $trainer)
     {
-        //
+        $file_path = public_path().'/images/'.$trainer->avatar;
+        \File::delete($file_path);
+        $trainer->delete();
+        return redirect()->route('trainers.index')->with('status', 'Entrenador eliminado correctamente');
     }
 }
