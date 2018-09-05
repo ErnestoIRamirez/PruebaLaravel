@@ -3,12 +3,8 @@
 @section('title', 'Trainers Create')
 
 @section('content')
-
-    @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            <p>{{$error}}</p>
-        @endforeach
-    @endif
+    @include('common.errors')
+   
     {!! Form::open(['route' => 'trainers.store', 'method' => 'POST', 'files' => true])!!}
         @include('trainers.form')
 

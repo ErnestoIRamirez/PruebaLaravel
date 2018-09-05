@@ -26,3 +26,7 @@ Route::get('/mi_primer_ruta', function() {
 });
 
 Route::resource('trainers', 'TrainerController');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
